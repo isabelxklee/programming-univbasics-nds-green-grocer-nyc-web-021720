@@ -1,7 +1,25 @@
+### Write the `find_item_by_name_in_collection` Method
+
+# * Arguments:
+#   * `String`: name of the item to find
+#   * `Array`: a collection of items to search through
+# * Returns:
+#   * `nil` if no match is found
+#   * the matching `Hash` if a match is found between the desired name and a given
+#     `Hash`'s :item key
+
+collection = [  { :item => "DOG FOOD" }, { :item => "WINE" }, { :item => "STRYCHNINE" } ]
+
 def find_item_by_name_in_collection(name, collection)
-  # Implement me first!
-  #
-  # Consult README for inputs and outputs
+  index = 0
+  while index < collection.length do 
+    if collection[index][:item] == name 
+      collection[index]
+    else 
+      nil 
+    end 
+    index += 1
+  end 
 end
 
 def consolidate_cart(cart)
