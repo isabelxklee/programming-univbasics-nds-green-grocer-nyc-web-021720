@@ -56,23 +56,101 @@ def consolidate_cart(cart)
   return new_cart
 end
 
+#########################################
+# Arguments:
+#   * array: a collection of item hashes
+#   * array: a collection of coupon hashes
+#
+# Returns:
+#   * A new array. Its members will be a mix of the item `Hash`es and,
+#     where applicable, the "ITEM W/COUPON" `Hash`. Rules for application are
+#     described below.
 
+# REMEMBER: This method **should** update cart
 
+# in order to get AVO W/COUPON, simply mutate the given coupon array and add the :clearance value, :price, and :count
+# divide the :cost by the :num to get the :price value
+# use modulo for :count % :num and use the remainder to update the non-coupon :count
+cart = [
+  {:item => "AVOCADO", :price => 3.00, :clearance => true, :count => 3},
+  {:item => "KALE",    :price => 3.00, :clearance => false, :count => 1}
+]
 
-
-
-
-
-
-
-
-
+coupons = [ {:item => "AVOCADO", :num => 2, :cost => 5.00} ]
+# new coupon => [ {:item => "AVOCADO W/COUPON", :price => 2.50, :clearance => true, :count => 2} ]
 
 def apply_coupons(cart, coupons)
-  # Consult README for inputs and outputs
-  #
-  # REMEMBER: This method **should** update cart
+  # if there's a match between the coupon item name and the cart item name...
+  # use modulo to find the remainder of count / num
+  # update the cart item's count to be the remainder value
+  index = 0 
+  while index < coupons.length do 
+
+    counter = 0
+    while counter < cart.length do 
+      if coupons[index][:item] == cart[counter][:item]
+        remainder = cart[counter][:count] % coupons[index][:num]
+        cart[counter][:count] = remainder
+      end
+      counter += 1
+    end 
+
+    index += 1
+  end   
+
+  
+  index = 0 
+  while index < coupons.length do  
+
+    # update the item name
+    grocery_item = coupons[index][:item]
+    coupons[index][:item] = "#{grocery_item} W/COUPON"
+
+    # add the :price value
+    cost = coupons[index][:cost]
+    count = coupons[index][:num]
+    price = cost/count
+    coupons[index][:price] = price
+    coupons[index].delete(:cost)
+
+    # add the :clearance value
+    coupons[index][:clearance] = true
+
+    # update :num to be :count
+    # remove :num value
+    coupons[index][:count] = coupons[index][:num]
+    coupons[index].delete(:num)
+
+    index += 1
+  end
+
+
+print coupons
+print cart
+
 end
+
+puts apply_coupons(cart, coupons)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def apply_clearance(cart)
   # Consult README for inputs and outputs
